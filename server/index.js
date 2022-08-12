@@ -22,10 +22,8 @@ io.on('connection', socket => {
             const user = {id: socket.id, nickName: userdata.nickName}
             users.push(user)
             socket.emit('login', user)
-            console.log('userLogin', userdata)
         } else {
             socket.emit('userExists', userdata.nickName + ' username is taken! Try some other username.');
-            console.log('userExists', userdata)
         }
     })
     socket.on('logout', (id) => {
@@ -33,7 +31,6 @@ io.on('connection', socket => {
         if (userRemove) {
             users.splice(users.findIndex(user => user.id === userRemove.id), 1)
             socket.emit('logout', userRemove)
-            console.log('userLogout', id)
         }
     })
     socket.on('message', (message) => {
@@ -43,13 +40,12 @@ io.on('connection', socket => {
         })
     })
     socket.on('typing',(typingUser)=>{
-        console.log('typing',typingUser)
         socket.broadcast.emit('typing', typingUser)
     })
 })
 
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan('common'));
 
 app.use(express.static(path.join(__dirname,'../chat-ui/dist')));
 
